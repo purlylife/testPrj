@@ -22,6 +22,7 @@ public class App {
         processor.onMessage(new MarketData("GOOGL", BigDecimal.valueOf(2800.00), 500));
         fakeClock.addAndGet(600);
         processor.onMessage(new MarketData("MSFT", BigDecimal.valueOf(300.00), 1100));
+        processor.shutdownScheduler();
         System.out.println("Data Repo: " + dataRepo);
     }
 }
