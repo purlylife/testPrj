@@ -106,19 +106,14 @@ public class MarketDataProcessor {
     }
 
     private MarketData findNextDataToPublish(long now) {
-        lock.lock();
-        try {
-            return pendingDataMap.values()
-                    .stream()
-                    .filter(md -> {
-                        Long lastPublishedTime = publishedSymbolMap.get(md.symbol());
-                        return lastPublishedTime == null || now - lastPublishedTime >= WINDOW_SIZE_MILLIS;
-                    })
-                    .max(Comparator.naturalOrder())
-                    .orElse(null);
-        } finally {
-            lock.unlock();
-        }
+        return pendingDataMap.values()
+                .stream()
+                .filter(md -> {
+                    Long lastPublishedTime = publishedSymbolMap.get(md.symbol());
+                    return lastPublishedTime == null || now - lastPublishedTime >= WINDOW_SIZE_MILLIS;
+                })
+                .max(Comparator.naturalOrder())
+                .orElse(null);
     }
 
     private void updateLatestMarketData(MarketData data) {
